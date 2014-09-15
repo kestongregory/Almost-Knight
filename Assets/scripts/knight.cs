@@ -5,43 +5,32 @@ public class knight : MonoBehaviour
 {
 	//player
 	public float speed; // declare the player move speed in Unity inspector
-	public int jumpHeight; //set in the Unity inspector
+	public float maxSpeed;
+	public float jumpForce; //set in the Unity inspector
+	
 	public bool isGrounded = false; //can see if set in the Unity inspector
+	public Transform groundCheck;
+	float groundRadius = 0.2f;
+	public LayerMask whatIsGround;
+	
+	void FixedUpdate()
+	{	
+		EndlessRun();
+		isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
+		
+		if (isGrounded && Input.GetMouseButtonDown(0))
+		{
+			rigidbody2D.AddForce(new Vector2(0, jumpForce));
+		}
+	}
 	
 	void Update()
 	{
-		EndlessRun();
-		if (Input.GetKeyDown("space") && isGrounded)
-		{
-			Jump(); // call the function
-		}
+
 	}
-	// Update is called once per frame
-	void FixedUpdate () 
-	{
-		
-	}
-	
-//	void OnTriggerEnter2D(Collider2D groundCollider)
-//	{
-//		Debug.Log("touched the ground!");
-//	}
 	
 	void EndlessRun()
 	{
 		rigidbody2D.AddForce(new Vector2 (speed, 0));
-	}
-	
-	void Jump()
-	{
-		if (!isGrounded)
-		{
-			return;
-		}
-		
-		isGrounded = false;
-	
-		Debug.Log("space was pressed");
-		rigidbody2D.AddForce(new Vector2(-5, jumpHeight));
 	}
 }
